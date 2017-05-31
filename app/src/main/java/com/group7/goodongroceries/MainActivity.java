@@ -18,6 +18,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.group7.goodongroceries.Utils.USDAUtils;
+
+
 public class MainActivity extends AppCompatActivity implements GroceryItemAdapter.OnGroceryCheckedChangeListener {
 
     private RecyclerView mGroceryListRecyclerView;
@@ -30,10 +33,6 @@ public class MainActivity extends AppCompatActivity implements GroceryItemAdapte
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawerLayout;
     private String mActivityTitle;
-
-
-
-
     private Toast mGroceryToast;
 
     @Override
@@ -71,6 +70,20 @@ public class MainActivity extends AppCompatActivity implements GroceryItemAdapte
             }
         });
 
+        Button testApiButton = (Button) findViewById(R.id.btn_test_api);
+        testApiButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                String todoText = mGroceryEntryEditText.getText().toString();
+                if (!TextUtils.isEmpty(todoText)) {
+                    String result = USDAUtils.buildSearchQueryURL(todoText);
+                    mGroceryListRecyclerView.scrollToPosition(0);
+                    mGroceryItemAdapter.addGroceryItem(result);
+                    mGroceryEntryEditText.setText("");
+                }
+            }
+        });
+
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -83,7 +96,6 @@ public class MainActivity extends AppCompatActivity implements GroceryItemAdapte
                 ((GroceryItemAdapter.GroceryItemViewHolder)viewHolder).removeFromList();
             }
         };
-
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
         itemTouchHelper.attachToRecyclerView(mGroceryListRecyclerView);
     }
@@ -101,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements GroceryItemAdapte
     }
 
     private void addDrawerItems() {
-        String[] osArray = { getString(R.string.user_pref) };
+        String[] osArray = { getString(R.string.user_pref), "Test USDA API" };
         mDrawerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
         mDrawerList.setAdapter(mDrawerAdapter);
     }
@@ -133,12 +145,6 @@ public class MainActivity extends AppCompatActivity implements GroceryItemAdapte
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
 
         // Activate the navigation drawer toggle
         if (mDrawerToggle.onOptionsItemSelected(item)) {
