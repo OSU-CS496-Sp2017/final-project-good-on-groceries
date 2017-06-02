@@ -37,12 +37,12 @@ public class GroceryListDBHelper extends SQLiteOpenHelper {
                         GroceryListContract.Nutrients.COLUMN_UNIT + " TEXT NOT NULL, " +
                         GroceryListContract.Nutrients.COLUMN_VALUE + " TEXT NOT NULL, " +
                         GroceryListContract.Nutrients.COLUMN_MEASUREMENT + " TEXT NOT NULL, " +
-                        GroceryListContract.Nutrients.COLUMN_FOOD_ID + " INTEGER REFERENCES " +
+                        GroceryListContract.Nutrients.COLUMN_FOOD_ID + " INTEGER NOT NULL REFERENCES " +
                             GroceryListContract.Food.TABLE_NAME +
                             " (" + GroceryListContract.Food._ID + ") " +
                             " ON DELETE CASCADE" +
                         ");";
-        
+
         db.execSQL(SQL_CREATE_LIST_TABLE);
         db.execSQL(SQL_CREATE_FOOD_TABLE);
         db.execSQL(SQL_CREATE_NUTRIENT_TABLE);
