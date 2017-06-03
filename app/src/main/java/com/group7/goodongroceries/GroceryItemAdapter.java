@@ -146,8 +146,8 @@ public class GroceryItemAdapter extends RecyclerView.Adapter<GroceryItemAdapter.
         holder.mInfoImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(this.getClass().getSimpleName(), "info icon works!");
-                GroceryItem groceryItem = mGroceryList.get(adapterPositionToArrayIndex(pos));
+//                Log.i(this.getClass().getSimpleName(), "info icon works!");
+                GroceryItem groceryItem = mGroceryList.get(pos);
                 mGroceryItemClickListener.onItemClick(groceryItem);
             }
         });

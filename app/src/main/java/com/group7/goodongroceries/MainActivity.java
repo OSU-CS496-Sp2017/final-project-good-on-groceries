@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity
                     if(null != mGroceryToast) {
                         mGroceryToast.cancel();
                     }
-                    mGroceryToast = Toast.makeText(MainActivity.this,"No Items Selected!",Toast.LENGTH_LONG);
+                    mGroceryToast = Toast.makeText(MainActivity.this,"No items selected!",Toast.LENGTH_LONG);
                     mGroceryToast.show();
                     return true;
                 }
@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity
                     if(null != mGroceryToast) {
                         mGroceryToast.cancel();
                     }
-                    mGroceryToast = Toast.makeText(MainActivity.this,"No Items to delete!",Toast.LENGTH_LONG);
+                    mGroceryToast = Toast.makeText(MainActivity.this,"No items to remove!",Toast.LENGTH_LONG);
                     mGroceryToast.show();
                     return true;
                 }

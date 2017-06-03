@@ -4,10 +4,13 @@ package com.group7.goodongroceries.items;
  * Created by dan on 5/17/2017.
  */
 
+import android.provider.ContactsContract;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.group7.goodongroceries.R;
@@ -64,7 +67,13 @@ public class GroceryProductAdapter extends RecyclerView.Adapter<GroceryProductAd
      */
     @Override
     public void onBindViewHolder(GroceryProductViewHolder holder, int position) {
-        String groceryProduct = mGroceryProductList.get(adapterPositionToArrayIndex(position));
+        final String groceryProduct = mGroceryProductList.get(adapterPositionToArrayIndex(position));
+        holder.mProductImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mProductClickListener.onItemClick(groceryProduct);
+            }
+        });
         holder.bind(groceryProduct);
     }
 
@@ -97,12 +106,17 @@ public class GroceryProductAdapter extends RecyclerView.Adapter<GroceryProductAd
     }
 
     class GroceryProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private CardView mProductCV;
         private TextView mProductTextView;
+        private ImageView mProductImage;
 
         public GroceryProductViewHolder(final View itemView) {
             super(itemView);
+            mProductCV = (CardView)itemView.findViewById(R.id.cv_product);
             mProductTextView = (TextView) itemView.findViewById(R.id.tv_product_text);
-            itemView.setOnClickListener(this);
+//            itemView.setOnClickListener(this);
+            mProductImage = (ImageView) itemView.findViewById(R.id.iv_product_launcher);
+            mProductImage.setOnClickListener(this);
         }
 
 //            CheckBox checkBox = (CheckBox)itemView.findViewById(R.id.item_checkbox);

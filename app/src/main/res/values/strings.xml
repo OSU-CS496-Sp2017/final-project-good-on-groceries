@@ -9,6 +9,8 @@
     <string name="product_info_heading">Product Information:</string>
     <string name="loading_error_message">Woops.  We couldn\'t complete your search.  Check your internet connection and try again.</string>
     <string name="action_delete_single">Delete Selected Items</string>
+    <string name="action_delete_error">No items are selected!</string>
     <string name="action_clear_all">Delete All Items</string>
+    <string name="action_clear_error">No items to remove!</string>
     <string name="action_share">Share your item with friends!</string>
 </resources>
