@@ -1,4 +1,4 @@
-package com.group7.goodongroceries.items;
+package com.group7.goodongroceries;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,8 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.group7.goodongroceries.R;
 
 /**
  * Created by dan on 5/31/2017.

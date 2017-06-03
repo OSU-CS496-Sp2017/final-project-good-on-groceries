@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.group7.goodongroceries.items.ItemSearchActivity"
+            android:name="com.group7.goodongroceries.ItemSearchActivity"
             android:parentActivityName=".MainActivity"
             android:launchMode="singleTop">
             <action android:name="android.intent.action.MAIN" />
@@ -32,13 +32,13 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name="com.group7.goodongroceries.items.ProductSearchActivity"
-            android:parentActivityName=".items.ItemSearchActivity"
+            android:name="com.group7.goodongroceries.ProductSearchActivity"
+            android:parentActivityName=".ItemSearchActivity"
             android:launchMode="singleTop">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".items.ItemSearchActivity" />
+                android:value=".ItemSearchActivity" />
         </activity>
     </application>
 

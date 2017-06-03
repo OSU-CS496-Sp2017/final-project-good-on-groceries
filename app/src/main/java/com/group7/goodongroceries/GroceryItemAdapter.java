@@ -4,7 +4,6 @@ package com.group7.goodongroceries;
  * Created by dan on 5/17/2017.
  */
 
-import android.provider.ContactsContract;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,15 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 
-import com.group7.goodongroceries.items.GroceryItem;
-
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by dan on 4/18/2017.

@@ -1,4 +1,4 @@
-package com.group7.goodongroceries.items;
+package com.group7.goodongroceries;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,14 +9,9 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.group7.goodongroceries.R;
 
 import java.util.ArrayList;
 

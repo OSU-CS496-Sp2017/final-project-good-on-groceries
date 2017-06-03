@@ -1,10 +1,9 @@
-package com.group7.goodongroceries.items;
+package com.group7.goodongroceries;
 
 /**
  * Created by dan on 5/17/2017.
  */
 
-import android.provider.ContactsContract;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,8 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.group7.goodongroceries.R;
 
 import java.util.ArrayList;
 

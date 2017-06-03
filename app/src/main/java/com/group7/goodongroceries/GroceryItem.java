@@ -1,4 +1,4 @@
-package com.group7.goodongroceries.items;
+package com.group7.goodongroceries;
 
 import java.io.Serializable;
 
