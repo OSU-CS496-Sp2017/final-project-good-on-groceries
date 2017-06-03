@@ -93,9 +93,29 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onItemClick(GroceryItem groceryItem) {
-        Intent intent = new Intent(this, ItemSearchActivity.class);
-        intent.putExtra(GroceryItem.EXTRA_GROCERY_ITEM, groceryItem);
-        startActivity(intent);
+
+        /*  TODO check for info in database, if info found, open product intent
+         *  Need to query the db, get the info (or not), if info found, construct a new
+         *  product item, set linked to "true" and call the appropriate intent.
+         */
+        // TODO remove dummy ProductItem
+        // Change boolean value to see affect on main screen info button
+        // true: info button goes direction to product info screen, with option to change info
+        // false: info button goes to product list screen, product info screens do not have the change info button.
+        ProductItem item = new ProductItem("whoohoo", groceryItem.getItemName(), false);
+
+        if (item.isLinked()) {
+            Intent intent = new Intent(this, ProductSearchActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(ProductItem.PRODUCT_EXTRA_ITEM, item);
+            intent.putExtra(ProductItem.PRODUCT_EXTRA_ITEM, bundle);
+            startActivity(intent);
+        }else {
+            Intent intent = new Intent(this, ItemSearchActivity.class);
+            intent.putExtra(GroceryItem.EXTRA_GROCERY_ITEM, groceryItem);
+            startActivity(intent);
+         }
+
     }
 
     @Override

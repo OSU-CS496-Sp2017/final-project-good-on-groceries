@@ -29,7 +29,7 @@ import java.util.ArrayList;
 
 public class ItemSearchActivity extends AppCompatActivity
         implements GroceryProductAdapter.OnItemClickListener,
-        LoaderManager.LoaderCallbacks<String> {
+        LoaderManager.LoaderCallbacks<ProductItem> {
 
     private static final int ITEM_SEARCH_LOADER_ID = 1;
     private static final String ITEM_SEARCH_KEY = "grocery_item_search";
@@ -41,6 +41,7 @@ public class ItemSearchActivity extends AppCompatActivity
     private TextView mLoadingErrorMessageTV;
 
     private GroceryItem mItem;
+    private ProductItem mProduct;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,29 +62,34 @@ public class ItemSearchActivity extends AppCompatActivity
             mItem = (GroceryItem) intent.getSerializableExtra(GroceryItem.EXTRA_GROCERY_ITEM);
             mItemNameTV.setText(mItem.getItemName());
         }
+
+        ProductItem product = new ProductItem(null, mItem.getItemName(), false);
         Bundle argsBundle = new Bundle();
-        argsBundle.putString(ITEM_SEARCH_KEY, mItem.getItemName());
+        argsBundle.putSerializable(ITEM_SEARCH_KEY, product);
         getSupportLoaderManager().initLoader(ITEM_SEARCH_LOADER_ID, argsBundle, this);
 
     }
 
     @Override
-    public void onItemClick(String item) {
+    public void onItemClick(ProductItem item) {
         Intent intent = new Intent(this, ProductSearchActivity.class);
-        intent.putExtra(GroceryItem.EXTRA_GROCERY_ITEM, item);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ProductItem.PRODUCT_EXTRA_ITEM, item);
+        intent.putExtra(ProductItem.PRODUCT_EXTRA_ITEM, bundle);
+//        intent.putExtra(GroceryItem.EXTRA_GROCERY_ITEM, item);
         startActivity(intent);
     }
 
     @Override
-    public Loader<String> onCreateLoader(int id, final Bundle args) {
-        return new AsyncTaskLoader<String>(this) {
+    public Loader<ProductItem> onCreateLoader(int id, final Bundle args) {
+        return new AsyncTaskLoader<ProductItem>(this) {
 
-            String mSearchResults;
+            ProductItem mSearchResults;
 
             @Override
             protected void onStartLoading() {
                 if (null != args) {
-                    mSearchResults = args.getString(ITEM_SEARCH_KEY);
+                    mSearchResults = (ProductItem) args.getSerializable(ITEM_SEARCH_KEY);
                     if (null != mSearchResults) {
                         deliverResult(mSearchResults);
                     } else {
@@ -94,34 +100,34 @@ public class ItemSearchActivity extends AppCompatActivity
             }
 
             @Override
-            public String loadInBackground() {
+            public ProductItem loadInBackground() {
                 if (null != args) {
                     //TODO put search query here.
                     //TODO should return JSON result
-                    return args.getString(ITEM_SEARCH_KEY);
+                    return (ProductItem)args.getSerializable(ITEM_SEARCH_KEY);
                 }
                 return null;
             }
         };
     }
 
-    private ArrayList<String> createTempListData(String item) {
-        ArrayList<String> list = new ArrayList<>();
+    private ArrayList<ProductItem> createTempListData(ProductItem item) {
+        ArrayList<ProductItem> list = new ArrayList<>();
         for (int i = 1; i < 21; i++) {
-            list.add("[ " + item + " ]" + " result: " + i);
+            list.add(new ProductItem(" product " + i, item.getItemName(), false));
         }
         return list;
     }
 
 
     @Override
-    public void onLoadFinished(Loader<String> loader, String data) {
+    public void onLoadFinished(Loader<ProductItem> loader, ProductItem data) {
 
         mLoadingIndicatorPB.setVisibility(View.INVISIBLE);
         if (null != data) {
             mLoadingErrorMessageTV.setVisibility(View.INVISIBLE);
             mSearchResultsRV.setVisibility(View.VISIBLE);
-            //TODO parse data into list here.
+            //TODO parse data into list here. The list needs to have ProductItems: ArrayList<ProductItem>
 
             mGroceryProductAdapter.updateSearchResults(createTempListData(data));
         } else {
@@ -132,7 +138,7 @@ public class ItemSearchActivity extends AppCompatActivity
     }
 
     @Override
-    public void onLoaderReset(Loader<String> loader) {
+    public void onLoaderReset(Loader<ProductItem> loader) {
 
     }
 }

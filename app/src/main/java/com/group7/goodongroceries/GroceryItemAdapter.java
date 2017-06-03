@@ -139,7 +139,6 @@ public class GroceryItemAdapter extends RecyclerView.Adapter<GroceryItemAdapter.
             }
         });
 
-        mGroceryList.get(pos).setPosition(pos);
         holder.bind(mGroceryList.get(pos));
     }
 

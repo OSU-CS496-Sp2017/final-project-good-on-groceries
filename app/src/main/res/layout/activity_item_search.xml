@@ -7,14 +7,16 @@
     android:layout_height="match_parent"
     tools:context="com.group7.goodongroceries.ItemSearchActivity">
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <!--<LinearLayout-->
+        <!--android:orientation="vertical"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="8dp"
+            android:paddingTop="8dp"
+            android:paddingLeft="8dp"
+            android:paddingBottom="1dp"
             android:textSize="30sp"
             android:text="@string/search_item_heading" />
 
@@ -22,11 +24,13 @@
             android:id="@+id/tv_item_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="8dp"
+            android:paddingTop="1dp"
+            android:paddingLeft="8dp"
+            android:paddingBottom="8dp"
             android:textSize="30sp"
             android:textColor="#000"/>
 
-    </LinearLayout>
+    <!--</LinearLayout>-->
 
     <TextView
         android:layout_width="wrap_content"
