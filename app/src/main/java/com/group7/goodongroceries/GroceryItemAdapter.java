@@ -156,7 +156,8 @@ public class GroceryItemAdapter extends RecyclerView.Adapter<GroceryItemAdapter.
         holder.bind(mGroceryList.get(pos));
     }
 
-    class GroceryItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class GroceryItemViewHolder extends RecyclerView.ViewHolder {
+//        class GroceryItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mItemTextView;
         private CheckBox mCheckbox;
         private ImageView mInfoImage;
@@ -194,21 +195,24 @@ public class GroceryItemAdapter extends RecyclerView.Adapter<GroceryItemAdapter.
 //            });
         }
 
-//        public void removeFromList() {
-//            int position = getAdapterPosition();
-//            mGroceryList.remove(adapterPositionToArrayIndex(position));
+        public void removeFromList() {
+            int position = getAdapterPosition();
+            mGroceryList.remove(adapterPositionToArrayIndex(position));
 //            notifyItemRemoved(adapterPositionToArrayIndex(position));
-//        }
+            notifyDataSetChanged();
+        }
 
         public void bind(GroceryItem groceryItem) {
             String itemName = groceryItem.getItemName();
             mItemTextView.setText(itemName);
         }
 
-        @Override
-        public void onClick(View v) {
-            GroceryItem groceryItem = mGroceryList.get(adapterPositionToArrayIndex(getAdapterPosition()));
-            mGroceryItemClickListener.onItemClick(groceryItem);
-        }
+
+
+//        @Override
+//        public void onClick(View v) {
+//            GroceryItem groceryItem = mGroceryList.get(adapterPositionToArrayIndex(getAdapterPosition()));
+//            mGroceryItemClickListener.onItemClick(groceryItem);
+//        }
     }
 }
