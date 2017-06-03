@@ -14,10 +14,6 @@ public class GroceryItem implements Serializable {
     private boolean mIsChecked;
     private int mPosition;
 
-    public void setItemName(String itemName) {
-        mItemName = itemName;
-    }
-
     public String getItemName() {
         return mItemName;
     }
@@ -33,10 +29,6 @@ public class GroceryItem implements Serializable {
 
     public void setChecked(boolean isChecked) {
         mIsChecked = isChecked;
-    }
-
-    public int getPosition() {
-        return mPosition;
     }
 
     public void setPosition (int position) {

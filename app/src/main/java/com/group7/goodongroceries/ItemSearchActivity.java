@@ -69,7 +69,6 @@ public class ItemSearchActivity extends AppCompatActivity
 
     @Override
     public void onItemClick(String item) {
-//        Log.d(this.getClass().getSimpleName(), "Item is:" + item);
         Intent intent = new Intent(this, ProductSearchActivity.class);
         intent.putExtra(GroceryItem.EXTRA_GROCERY_ITEM, item);
         startActivity(intent);

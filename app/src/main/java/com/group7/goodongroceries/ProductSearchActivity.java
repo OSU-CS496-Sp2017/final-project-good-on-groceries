@@ -37,7 +37,7 @@ public class ProductSearchActivity extends AppCompatActivity {
             mProductName = (String) intent.getSerializableExtra(GroceryItem.EXTRA_GROCERY_ITEM);
             mProductNameTextView.setText(mProductName);
         }
-
+        //TODO fill out this class with necessary elements for product results.
         mProductResultsTextView.setText("Results will be found here.");
     }
 }

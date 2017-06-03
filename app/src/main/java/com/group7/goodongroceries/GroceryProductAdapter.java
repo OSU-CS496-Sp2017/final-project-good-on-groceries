@@ -22,18 +22,11 @@ public class GroceryProductAdapter extends RecyclerView.Adapter<GroceryProductAd
     private ArrayList<String> mGroceryProductList;
     private OnItemClickListener mProductClickListener;
 
-//    private OnItemCheckedChangeListener mCheckedChangedListener;
-
     /**
      * For use in places where we need to listen to both a checkbox and the item itself.
      * @param checkedChangedListener
      * @param clickListener
      */
-//    public GroceryProductAdapter(OnItemCheckedChangeListener checkedChangedListener, OnItemClickListener clickListener) {
-//        mGroceryProductList = new ArrayList<String>();
-//        mCheckedChangedListener = checkedChangedListener;
-//        mProductClickListener = clickListener;
-//    }
 
     /**
      * For use where we only need to listen to clicking on an item.
@@ -84,18 +77,9 @@ public class GroceryProductAdapter extends RecyclerView.Adapter<GroceryProductAd
         notifyDataSetChanged();
     }
 
-//    public void addGroceryItem(String item) {
-//        mGroceryProductList.add(item);
-//        notifyItemInserted(0);
-//    }
-
     private int adapterPositionToArrayIndex(int position) {
         return mGroceryProductList.size() - position -1;
     }
-
-//    public interface OnItemCheckedChangeListener {
-//        void onItemCheckChange(String item, boolean isChecked);
-//    }
 
     public interface OnItemClickListener {
         //TODO replace "String item" with utils class item object.
@@ -111,27 +95,9 @@ public class GroceryProductAdapter extends RecyclerView.Adapter<GroceryProductAd
             super(itemView);
             mProductCV = (CardView)itemView.findViewById(R.id.cv_product);
             mProductTextView = (TextView) itemView.findViewById(R.id.tv_product_text);
-//            itemView.setOnClickListener(this);
             mProductImage = (ImageView) itemView.findViewById(R.id.iv_product_launcher);
             mProductImage.setOnClickListener(this);
         }
-
-//            CheckBox checkBox = (CheckBox)itemView.findViewById(R.id.item_checkbox);
-//            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
-
-//                @Override
-//                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                    String item = mGroceryProductList.get(adapterPositionToArrayIndex(getAdapterPosition()));
-////                    mCheckedChangedListener.onItemCheckChange(item, isChecked);
-////                }
-////            });
-//        }
-
-//        public void removeFromList() {
-//            int position = getAdapterPosition();
-//            mGroceryProductList.remove(adapterPositionToArrayIndex(position));
-//            notifyItemRemoved(position);
-//        }
 
         public void bind(String item) {
             mProductTextView.setText(item);

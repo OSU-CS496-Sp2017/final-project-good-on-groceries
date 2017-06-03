@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity
     private static final String ITEM_KEY = "groceryListItemName";
     private static final int MAIN_LOADER_ID = 0;
 
-    //TODO temporary value for testing
+    //TODO temporary value for testing, replace referenced sites with Toast about empty item
     private static final String DEFAULT_ITEM_NAME= "garbonzo beans";
 
     private RecyclerView mGroceryItemsRV;
@@ -188,14 +188,11 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public String loadInBackground() {
-                // TODO update list with new item here.
                 String item = "";
                 if (null != args) {
                     if (args.containsKey(ITEM_KEY)) {
                         item = args.getString(ITEM_KEY);
                     }
-//                    Log.d(TAG, "AsyncTaskLoader making item list: ");
-//                    item = item + ",milk,bread,cookies,licorice,crackers,soup";
 
                     return item;
                 } else {
@@ -216,7 +213,6 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "AsyncTaskLoader's onLoadFinished called");
         if (null != data) {
             mGroceryItemsRV.setVisibility(View.VISIBLE);
-//            mGroceryList = constructArrayList(data);
             mGroceryItemsRV.scrollToPosition(0);
             mGroceryItemAdapter.addGroceryItem(data);
             mItemEntryBoxET.setText("");
@@ -230,7 +226,6 @@ public class MainActivity extends AppCompatActivity
         ArrayList<GroceryItem> forecastItems = new ArrayList<>();
         for (String item : arrayList) {
             GroceryItem forecastItem = new GroceryItem(item);
-//            forecastItem.itemName = item;
             forecastItems.add(forecastItem);
         }
         return forecastItems;

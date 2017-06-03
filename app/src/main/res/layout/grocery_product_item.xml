@@ -33,7 +33,4 @@
     </RelativeLayout>
     </android.support.v7.widget.CardView>
 
-    <!--android:text="" />-->
-    <!--android:text="This is a TODO" />-->
-
 </LinearLayout>

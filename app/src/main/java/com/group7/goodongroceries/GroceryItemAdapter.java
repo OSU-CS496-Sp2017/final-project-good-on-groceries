@@ -46,12 +46,6 @@ public class GroceryItemAdapter extends RecyclerView.Adapter<GroceryItemAdapter.
         void onItemCheckChange(String item, boolean isChecked);
     }
 
-//    public void updateGroceryList(String item) {
-////        public void updateGroceryList(ArrayList<GroceryItem> groceryItems) {
-//        mGroceryList.add(new GroceryItem(item));
-//        notifyDataSetChanged();
-//    }
-
     /**
      * Removes and item from the grocery list.
      *
@@ -96,7 +90,6 @@ public class GroceryItemAdapter extends RecyclerView.Adapter<GroceryItemAdapter.
     }
 
     public void clearGroceryList() {
-        //TODO need to figure out how to clear the checkboxes along with the items
         mGroceryList.clear();
         notifyDataSetChanged();
     }
@@ -141,7 +134,6 @@ public class GroceryItemAdapter extends RecyclerView.Adapter<GroceryItemAdapter.
         holder.mInfoImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Log.i(this.getClass().getSimpleName(), "info icon works!");
                 GroceryItem groceryItem = mGroceryList.get(pos);
                 mGroceryItemClickListener.onItemClick(groceryItem);
             }
@@ -152,7 +144,6 @@ public class GroceryItemAdapter extends RecyclerView.Adapter<GroceryItemAdapter.
     }
 
     class GroceryItemViewHolder extends RecyclerView.ViewHolder {
-//        class GroceryItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private TextView mItemTextView;
         private CheckBox mCheckbox;
         private ImageView mInfoImage;
@@ -162,38 +153,14 @@ public class GroceryItemAdapter extends RecyclerView.Adapter<GroceryItemAdapter.
             super(itemView);
             mItemCV = (CardView) itemView.findViewById(R.id.cv_item);
             mItemTextView = (TextView) itemView.findViewById(R.id.tv_item_name);
-//            itemView.setOnClickListener(this);
             mCheckbox = (CheckBox) itemView.findViewById(R.id.item_checkbox);
             mCheckbox.setChecked(false);
-
             mInfoImage = (ImageView)itemView.findViewById(R.id.iv_item_launcher);
-//            mInfoImage.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Log.i(this.getClass().getSimpleName(), "info icon works!");
-//                    GroceryItem groceryItem = mGroceryList.get(adapterPositionToArrayIndex(getAdapterPosition()));
-//                    mGroceryItemClickListener.onItemClick(groceryItem);
-//                }
-//            });
-//            mInfoImage.setOnClickListener(this);
-
-//            mCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//
-//                @Override
-//                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                    int position = adapterPositionToArrayIndex(getAdapterPosition());
-//                    GroceryItem item = mGroceryList.get(position);
-////                    mCheckbox.setTag(position, mCheckbox);
-////                    GroceryItem item = mGroceryList.get(getAdapterPosition());
-//                    mCheckedChangedListener.onItemCheckChange(item.itemName, isChecked);
-//                }
-//            });
         }
 
         public void removeFromList() {
             int position = getAdapterPosition();
             mGroceryList.remove(adapterPositionToArrayIndex(position));
-//            notifyItemRemoved(adapterPositionToArrayIndex(position));
             notifyDataSetChanged();
         }
 
@@ -201,13 +168,5 @@ public class GroceryItemAdapter extends RecyclerView.Adapter<GroceryItemAdapter.
             String itemName = groceryItem.getItemName();
             mItemTextView.setText(itemName);
         }
-
-
-
-//        @Override
-//        public void onClick(View v) {
-//            GroceryItem groceryItem = mGroceryList.get(adapterPositionToArrayIndex(getAdapterPosition()));
-//            mGroceryItemClickListener.onItemClick(groceryItem);
-//        }
     }
 }
