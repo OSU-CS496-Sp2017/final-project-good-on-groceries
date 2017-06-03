@@ -3,4 +3,12 @@
     <string name="user_pref">User Preferences</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="search_item_heading">Grocery Item:</string>
+    <string name="search_list_heading">Product List:</string>
+    <string name="product_search_heading">Product Name:</string>
+    <string name="product_info_heading">Product Information:</string>
+    <string name="loading_error_message">Woops.  We couldn\'t complete your search.  Check your internet connection and try again.</string>
+    <string name="action_delete_single">Delete Selected Items</string>
+    <string name="action_clear_all">Delete All Items</string>
+    <string name="action_share">Share your item with friends!</string>
 </resources>

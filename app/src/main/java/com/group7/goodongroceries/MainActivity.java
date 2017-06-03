@@ -1,8 +1,14 @@
 package com.group7.goodongroceries;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -10,6 +16,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -18,21 +26,30 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements GroceryItemAdapter.OnGroceryCheckedChangeListener {
+import com.group7.goodongroceries.items.GroceryItem;
+import com.group7.goodongroceries.items.ItemSearchActivity;
+import com.group7.goodongroceries.items.ProductSearchActivity;
 
-    private RecyclerView mGroceryListRecyclerView;
-    private EditText mGroceryEntryEditText;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+public class MainActivity extends AppCompatActivity
+        implements GroceryItemAdapter.OnItemCheckedChangeListener,
+        GroceryItemAdapter.OnGroceryItemClickListener,
+        LoaderManager.LoaderCallbacks<String> {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String ITEM_KEY = "groceryListItemName";
+    private static final int MAIN_LOADER_ID = 0;
+
+    //TODO temporary value for testing
+    private static final String DEFAULT_ITEM_NAME= "garbonzo beans";
+
+    private RecyclerView mGroceryItemsRV;
     private GroceryItemAdapter mGroceryItemAdapter;
+    private EditText mItemEntryBoxET;
 
-    // Classes needed for drawer
-    private ListView mDrawerList;
-    private ArrayAdapter<String> mDrawerAdapter;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private DrawerLayout mDrawerLayout;
-    private String mActivityTitle;
-
-
-
+    private ArrayList<GroceryItem> mGroceryList;
 
     private Toast mGroceryToast;
 
@@ -40,112 +57,38 @@ public class MainActivity extends AppCompatActivity implements GroceryItemAdapte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mGroceryEntryEditText = (EditText) findViewById(R.id.et_item_entry_box);
-        mGroceryListRecyclerView = (RecyclerView)findViewById(R.id.rv_item_list);
-        mGroceryListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mGroceryListRecyclerView.setHasFixedSize(true);
 
-        mGroceryListRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mGroceryList = null;
 
-        mGroceryItemAdapter = new GroceryItemAdapter(this);
-        mGroceryListRecyclerView.setAdapter(mGroceryItemAdapter);
+        mItemEntryBoxET = (EditText)findViewById(R.id.et_item_entry_box);
+        mGroceryItemsRV = (RecyclerView)findViewById(R.id.rv_item);
 
-        mDrawerList = (ListView)findViewById(R.id.navList);
-        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
-        addDrawerItems();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        mActivityTitle = getTitle().toString();
-        setupDrawer();
+        mGroceryItemAdapter = new GroceryItemAdapter(this, this);
+        mGroceryItemsRV.setAdapter(mGroceryItemAdapter);
+        mGroceryItemsRV.setLayoutManager(new LinearLayoutManager(this));
+        mGroceryItemsRV.setHasFixedSize(true);
 
-        Button addTodoButton = (Button) findViewById(R.id.btn_add_todo);
-        addTodoButton.setOnClickListener(new View.OnClickListener(){
+        getSupportLoaderManager().initLoader(MAIN_LOADER_ID, null, this);
+
+        Button addItemButton = (Button)findViewById(R.id.btn_add_item);
+        addItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String todoText = mGroceryEntryEditText.getText().toString();
-                if (!TextUtils.isEmpty(todoText)) {
-                    mGroceryListRecyclerView.scrollToPosition(0);
-                    mGroceryItemAdapter.addGroceryItem(todoText);
-                    mGroceryEntryEditText.setText("");
+                String itemText = mItemEntryBoxET.getText().toString();
+                if (!TextUtils.isEmpty(itemText)) {
+
                 }
+                updateList(mItemEntryBoxET.getText().toString());
+                mItemEntryBoxET.setText("");
             }
         });
-
-        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                // nothing to do here.
-                return false;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                ((GroceryItemAdapter.GroceryItemViewHolder)viewHolder).removeFromList();
-            }
-        };
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
-        itemTouchHelper.attachToRecyclerView(mGroceryListRecyclerView);
     }
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    private void addDrawerItems() {
-        String[] osArray = { getString(R.string.user_pref) };
-        mDrawerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, osArray);
-        mDrawerList.setAdapter(mDrawerAdapter);
-    }
-
-    private void setupDrawer() {
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-                R.string.drawer_open, R.string.drawer_close) {
-
-            /** Called when a drawer has settled in a completely open state. */
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle("Options");
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-
-            /** Called when a drawer has settled in a completely closed state. */
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                getSupportActionBar().setTitle(mActivityTitle);
-                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-            }
-        };
-        mDrawerToggle.setDrawerIndicatorEnabled(true);
-        mDrawerLayout.addDrawerListener(mDrawerToggle);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-
-        // Activate the navigation drawer toggle
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    public void onItemClick(GroceryItem groceryItem) {
+        Intent intent = new Intent(this, ItemSearchActivity.class);
+        intent.putExtra(GroceryItem.EXTRA_GROCERY_ITEM, groceryItem);
+        startActivity(intent);
     }
 
     @Override
@@ -156,5 +99,150 @@ public class MainActivity extends AppCompatActivity implements GroceryItemAdapte
         String statusMessage = isChecked ? "COMPLETED" : "MARKED INCOMPLETE";
         mGroceryToast = Toast.makeText(this, statusMessage + ": " + item, Toast.LENGTH_LONG);
         mGroceryToast.show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        switch (item.getItemId()) {
+            case R.id.action_delete:
+                if (!mGroceryItemAdapter.itemSelected()) {
+                    if(null != mGroceryToast) {
+                        mGroceryToast.cancel();
+                    }
+                    mGroceryToast = Toast.makeText(MainActivity.this,"No Items Selected!",Toast.LENGTH_LONG);
+                    mGroceryToast.show();
+                    return true;
+                }
+                builder.setTitle("Delete Selected Items")
+                .setMessage("Are you sure?")
+                .setIcon(R.drawable.ic_action_delete_single)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mGroceryItemAdapter.removeGroceryItems();
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
+
+                return true;
+            case R.id.action_clear:
+                if (0 == mGroceryItemAdapter.getItemCount()) {
+                    if(null != mGroceryToast) {
+                        mGroceryToast.cancel();
+                    }
+                    mGroceryToast = Toast.makeText(MainActivity.this,"No Items to delete!",Toast.LENGTH_LONG);
+                    mGroceryToast.show();
+                    return true;
+                }
+                builder.setTitle("Delete All Items")
+                .setMessage("Are you sure?")
+                .setIcon(R.drawable.ic_action_clear)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Log.d(this.getClass().getSimpleName(), "Clearing all items");
+                    mGroceryItemAdapter.clearGroceryList();                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public Loader<String> onCreateLoader(int id, final Bundle args) {
+        return new AsyncTaskLoader<String>(this) {
+
+            String mGroceryListString;
+
+            @Override
+            protected void onStartLoading () {
+                if (null != args) {
+                    if (null != mGroceryListString) {
+                        Log.d(TAG, "AsyncTaskLoader delivering cached results.");
+                        deliverResult(mGroceryListString);
+                    } else {
+                        forceLoad();
+
+                    }
+                }
+            }
+
+            @Override
+            public String loadInBackground() {
+                // TODO update list with new item here.
+                String item = "";
+                if (null != args) {
+                    if (args.containsKey(ITEM_KEY)) {
+                        item = args.getString(ITEM_KEY);
+                    }
+//                    Log.d(TAG, "AsyncTaskLoader making item list: ");
+//                    item = item + ",milk,bread,cookies,licorice,crackers,soup";
+
+                    return item;
+                } else {
+                    return null;
+                }
+            }
+
+            @Override
+            public void deliverResult (String data) {
+                mGroceryListString = data;
+                super.deliverResult(data);
+            }
+        };
+    }
+
+    @Override
+    public void onLoadFinished(Loader<String> loader, String data) {
+        Log.d(TAG, "AsyncTaskLoader's onLoadFinished called");
+        if (null != data) {
+            mGroceryItemsRV.setVisibility(View.VISIBLE);
+//            mGroceryList = constructArrayList(data);
+            mGroceryItemsRV.scrollToPosition(0);
+            mGroceryItemAdapter.addGroceryItem(data);
+            mItemEntryBoxET.setText("");
+        } else {
+            mGroceryItemsRV.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private ArrayList<GroceryItem> constructArrayList (String listString) {
+        ArrayList<String> arrayList = new ArrayList<String>(Arrays.asList(listString.split(",")));
+        ArrayList<GroceryItem> forecastItems = new ArrayList<>();
+        for (String item : arrayList) {
+            GroceryItem forecastItem = new GroceryItem(item);
+//            forecastItem.itemName = item;
+            forecastItems.add(forecastItem);
+        }
+        return forecastItems;
+    }
+
+    @Override
+    public void onLoaderReset(Loader<String> loader) {
+        // Nothing to do.
+    }
+
+    public void updateList(String itemName) {
+        if (null == itemName || itemName.isEmpty()) {
+            itemName = DEFAULT_ITEM_NAME;
+        }
+
+        Log.d(TAG, "got item: " + itemName);
+
+        Bundle bundleArgs = new Bundle();
+        bundleArgs.putString(ITEM_KEY, itemName);
+        getSupportLoaderManager().restartLoader(MAIN_LOADER_ID, bundleArgs, this);
     }
 }
