@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity
         // TODO Change boolean value to see affect on main screen info button
         // true: info button goes direction to product info screen, with option to change info
         // false: info button goes to product list screen, product info screens do not have the change info button.
-        ProductItem item = new ProductItem("whoohoo", groceryItem.getItemName(), true);
+        ProductItem item = new ProductItem("whoohoo", groceryItem.getItemName(), false);
 
         if (item.isLinked()) {
             Intent intent = new Intent(this, ProductSearchActivity.class);
