@@ -66,7 +66,7 @@ public class GroceryItemAdapter extends RecyclerView.Adapter<GroceryItemAdapter.
 
         for (int i = 0; i < tempList.size(); i++) {
             GroceryItem item = tempList.get(i);
-            if (item.isChecked()) {
+            if (item.isChecked() && mGroceryList.contains(item)) {
                 Log.d(this.getClass().getSimpleName(), "removing item [ " + item.getItemName() + " ]");
                 mGroceryList.remove(item);
                 removed = true;
