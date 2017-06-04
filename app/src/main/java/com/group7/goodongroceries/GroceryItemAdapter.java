@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -57,15 +58,21 @@ public class GroceryItemAdapter extends RecyclerView.Adapter<GroceryItemAdapter.
             return removed;
         }
 
-        for (int i = 0; i < mGroceryList.size(); i++) {
-            GroceryItem item = mGroceryList.get(i);
+        //TODO create new list to find items to remove, then remove them from the field list
+
+        ArrayList<GroceryItem> tempList = new ArrayList<>();
+        tempList.addAll(mGroceryList);
+
+
+        for (int i = 0; i < tempList.size(); i++) {
+            GroceryItem item = tempList.get(i);
             if (item.isChecked()) {
                 Log.d(this.getClass().getSimpleName(), "removing item [ " + item.getItemName() + " ]");
                 mGroceryList.remove(item);
-                notifyDataSetChanged();
                 removed = true;
             }
         }
+        notifyDataSetChanged();
         return removed;
     }
 

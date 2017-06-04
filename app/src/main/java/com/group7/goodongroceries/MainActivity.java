@@ -99,10 +99,10 @@ public class MainActivity extends AppCompatActivity
          *  product item, set linked to "true" and call the appropriate intent.
          */
         // TODO remove dummy ProductItem
-        // Change boolean value to see affect on main screen info button
+        // TODO Change boolean value to see affect on main screen info button
         // true: info button goes direction to product info screen, with option to change info
         // false: info button goes to product list screen, product info screens do not have the change info button.
-        ProductItem item = new ProductItem("whoohoo", groceryItem.getItemName(), false);
+        ProductItem item = new ProductItem("whoohoo", groceryItem.getItemName(), true);
 
         if (item.isLinked()) {
             Intent intent = new Intent(this, ProductSearchActivity.class);
@@ -136,6 +136,10 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (null != mGroceryToast) {
+            mGroceryToast.cancel();
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         switch (item.getItemId()) {
