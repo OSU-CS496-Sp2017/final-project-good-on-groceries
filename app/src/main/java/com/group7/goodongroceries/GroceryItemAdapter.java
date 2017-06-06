@@ -58,8 +58,7 @@ public class GroceryItemAdapter extends RecyclerView.Adapter<GroceryItemAdapter.
             return removed;
         }
 
-        //TODO create new list to find items to remove, then remove them from the field list
-
+        // TODO delete from db?
         ArrayList<GroceryItem> tempList = new ArrayList<>();
         tempList.addAll(mGroceryList);
 
@@ -91,12 +90,14 @@ public class GroceryItemAdapter extends RecyclerView.Adapter<GroceryItemAdapter.
     }
 
     public void addGroceryItem(String item) {
+        //TODO add to db?
         mGroceryList.add(new GroceryItem(item));
         notifyItemInserted(0);
         notifyDataSetChanged();
     }
 
     public void clearGroceryList() {
+        //TODO clear db?
         mGroceryList.clear();
         notifyDataSetChanged();
     }
