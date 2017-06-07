@@ -28,14 +28,6 @@
             android:textSize="24sp"
             />
 
-        <Button
-            android:id="@+id/btn_test_api"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Test API"
-            android:textSize="24sp"
-            />
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_item_list"
             android:layout_width="match_parent"

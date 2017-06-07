@@ -74,27 +74,6 @@ public class MainActivity extends AppCompatActivity implements GroceryItemAdapte
             }
         });
 
-        Button testApiButton = (Button) findViewById(R.id.btn_test_api);
-        testApiButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                String todoText = mGroceryEntryEditText.getText().toString();
-                if (!TextUtils.isEmpty(todoText)) {
-                    String result = USDAUtils.buildSearchQueryURL(todoText);
-                    Log.d("MainActivity", result);
-                    try {
-                        String val = NetworkUtils.doHTTPGet(result);
-                        Log.d("MainActivity", val);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    mGroceryListRecyclerView.scrollToPosition(0);
-                    mGroceryItemAdapter.addGroceryItem(result);
-                    mGroceryEntryEditText.setText("");
-                }
-            }
-        });
-
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
