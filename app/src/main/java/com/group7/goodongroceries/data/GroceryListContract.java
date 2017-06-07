@@ -14,14 +14,14 @@ public class GroceryListContract {
 
     public static class Food {
         public static final String TABLE_NAME = "food";
-        public static final String _ID = "id";
+        public static final String _ID = "_id";
         public static final String COLUMN_DESCRIPTION = "description";
     }
 
     public static class Nutrients {
         public static final String TABLE_NAME = "nutrients";
         public static final String _ID = "_id";
-        public static final String COLUMN_GROUP = "group";
+        public static final String COLUMN_GROUP = "ngroup";
         public static final String COLUMN_UNIT = "unit";
         public static final String COLUMN_VALUE = "value";
         public static final String COLUMN_MEASUREMENT = "measurement";
