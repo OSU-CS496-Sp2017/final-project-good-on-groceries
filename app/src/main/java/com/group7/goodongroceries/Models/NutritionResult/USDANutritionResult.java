@@ -14,7 +14,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({
     "report"
 })
-public class NutritionResult {
+public class USDANutritionResult {
 
     @JsonProperty("report")
     private Report report;
