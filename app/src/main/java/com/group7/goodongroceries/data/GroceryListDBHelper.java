@@ -20,7 +20,7 @@ public class GroceryListDBHelper extends SQLiteOpenHelper {
                 "CREATE TABLE " + GroceryListContract.ListItems.TABLE_NAME + " (" +
                         GroceryListContract.ListItems._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         GroceryListContract.ListItems.COLUMN_ENTRY + " TEXT NOT NULL, " +
-                        GroceryListContract.ListItems.COLUMN_CHECKED + " INTEGER DEFAULT NOT NULL, " +
+                        GroceryListContract.ListItems.COLUMN_CHECKED + " INTEGER DEFAULT 1, " +
                         GroceryListContract.ListItems.COLUMN_FOOD_ID + " INTEGER " +
                         ");";
 

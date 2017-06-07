@@ -22,11 +22,33 @@ public class GroceryItem implements Serializable {
         mIsChecked = false;
     }
 
+    public GroceryItem(String itemName, boolean isChecked) {
+        mItemName = itemName;
+        mIsChecked = isChecked;
+    }
+
     public boolean isChecked() {
         return mIsChecked;
     }
 
     public void setChecked(boolean isChecked) {
         mIsChecked = isChecked;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o == this) {
+            return true;
+        }
+
+        if(!(o instanceof GroceryItem)) {
+            return false;
+        }
+
+        GroceryItem groceryItem = (GroceryItem) o;
+
+        //Check if the item name is the same when checking for equality
+        //When adding/removing from lists the name needs to be unique.
+        return this.getItemName().toLowerCase().equals(groceryItem.getItemName().toLowerCase());
     }
 }
