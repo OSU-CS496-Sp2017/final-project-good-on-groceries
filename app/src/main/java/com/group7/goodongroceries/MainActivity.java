@@ -65,9 +65,26 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 String itemText = mItemEntryBoxET.getText().toString();
-                if (!TextUtils.isEmpty(itemText)) {
 
+                // Show Toast if there is no text.
+                if (TextUtils.isEmpty(itemText)) {
+                    if(null != mGroceryToast) {
+                        mGroceryToast.cancel();
+                    }
+                    mGroceryToast = Toast.makeText(MainActivity.this, "You must enter an item name!", Toast.LENGTH_LONG);
+                    mGroceryToast.show();
+                    return;
                 }
+
+                // Show Toast if no letters or numbers are entered
+//                if (!itemText.matches("[a-zA-Z0-9 ]")) {
+//                    if(null != mGroceryToast) {
+//                        mGroceryToast.cancel();
+//                    }
+//                    mGroceryToast = Toast.makeText(MainActivity.this, "The item name is not valid!\n Letters and numbers only.", Toast.LENGTH_LONG);
+//                    mGroceryToast.show();
+//                    return;
+//                }
                 updateList(mItemEntryBoxET.getText().toString());
                 mItemEntryBoxET.setText("");
             }
