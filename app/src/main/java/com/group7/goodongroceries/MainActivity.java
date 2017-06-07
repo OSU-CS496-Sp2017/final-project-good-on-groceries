@@ -2,6 +2,8 @@ package com.group7.goodongroceries;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -20,8 +22,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.group7.goodongroceries.data.GroceryListContract;
+import com.group7.goodongroceries.data.GroceryListDBHelper;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements GroceryItemAdapter.OnItemCheckedChangeListener,
@@ -39,21 +45,22 @@ public class MainActivity extends AppCompatActivity
     private GroceryItemAdapter mGroceryItemAdapter;
     private EditText mItemEntryBoxET;
 
-    private ArrayList<GroceryItem> mGroceryList;
-
     private Toast mGroceryToast;
+
+    private SQLiteDatabase mDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mGroceryList = null;
+        GroceryListDBHelper dbHelper = new GroceryListDBHelper(this);
+        mDB = dbHelper.getWritableDatabase();
 
         mItemEntryBoxET = (EditText)findViewById(R.id.et_item_entry_box);
         mGroceryItemsRV = (RecyclerView)findViewById(R.id.rv_item);
 
-        mGroceryItemAdapter = new GroceryItemAdapter(this, this);
+        mGroceryItemAdapter = new GroceryItemAdapter(this, this, mDB);
         mGroceryItemsRV.setAdapter(mGroceryItemAdapter);
         mGroceryItemsRV.setLayoutManager(new LinearLayoutManager(this));
         mGroceryItemsRV.setHasFixedSize(true);
@@ -119,12 +126,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onItemCheckChange(String item, boolean isChecked) {
+    public void onItemCheckChange(GroceryItem item, boolean isChecked) {
         if(null != mGroceryToast) {
             mGroceryToast.cancel();
         }
         String statusMessage = isChecked ? "COMPLETED" : "MARKED INCOMPLETE";
-        mGroceryToast = Toast.makeText(this, statusMessage + ": " + item, Toast.LENGTH_LONG);
+        mGroceryToast = Toast.makeText(this, statusMessage + ": " + item.getItemName(), Toast.LENGTH_LONG);
         mGroceryToast.show();
     }
 
@@ -238,21 +245,12 @@ public class MainActivity extends AppCompatActivity
         if (null != data) {
             mGroceryItemsRV.setVisibility(View.VISIBLE);
             mGroceryItemsRV.scrollToPosition(0);
-            mGroceryItemAdapter.addGroceryItem(data);
+            GroceryItem item = new GroceryItem(data);
+            mGroceryItemAdapter.addGroceryItem(item);
             mItemEntryBoxET.setText("");
         } else {
             mGroceryItemsRV.setVisibility(View.INVISIBLE);
         }
-    }
-
-    private ArrayList<GroceryItem> constructArrayList (String listString) {
-        ArrayList<String> arrayList = new ArrayList<String>(Arrays.asList(listString.split(",")));
-        ArrayList<GroceryItem> forecastItems = new ArrayList<>();
-        for (String item : arrayList) {
-            GroceryItem forecastItem = new GroceryItem(item);
-            forecastItems.add(forecastItem);
-        }
-        return forecastItems;
     }
 
     @Override

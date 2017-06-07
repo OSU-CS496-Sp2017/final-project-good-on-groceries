@@ -4,6 +4,9 @@ package com.group7.goodongroceries;
  * Created by dan on 5/17/2017.
  */
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,8 +18,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.group7.goodongroceries.data.GroceryListContract;
+import com.group7.goodongroceries.data.GroceryListDBHelper;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by dan on 4/18/2017.
@@ -24,17 +31,21 @@ import java.util.ArrayList;
 
 public class GroceryItemAdapter extends RecyclerView.Adapter<GroceryItemAdapter.GroceryItemViewHolder> {
 
-    private ArrayList<GroceryItem> mGroceryList;
+    private List<GroceryItem> mGroceryList;
     private OnGroceryItemClickListener mGroceryItemClickListener;
     private OnItemCheckedChangeListener mCheckedChangedListener;
+    private SQLiteDatabase mDB;
 
     /**
      * For use in places where we need to listen to both a checkbox and the item itself.
      * @param checkedChangeListener
      * @param clickListener
      */
-    public GroceryItemAdapter(OnGroceryItemClickListener clickListener, OnItemCheckedChangeListener checkedChangeListener) {
-        mGroceryList = new ArrayList<GroceryItem>();
+    public GroceryItemAdapter(OnGroceryItemClickListener clickListener,
+                              OnItemCheckedChangeListener checkedChangeListener,
+                              SQLiteDatabase db) {
+        mDB = db;
+        mGroceryList = getGroceryListFromDb();
         mGroceryItemClickListener = clickListener;
         mCheckedChangedListener = checkedChangeListener;
     }
@@ -44,36 +55,58 @@ public class GroceryItemAdapter extends RecyclerView.Adapter<GroceryItemAdapter.
     }
 
     public interface OnItemCheckedChangeListener {
-        void onItemCheckChange(String item, boolean isChecked);
+        void onItemCheckChange(GroceryItem item, boolean isChecked);
+    }
+
+    private List<GroceryItem> getGroceryListFromDb() {
+        Cursor cursor = mDB.query(
+                GroceryListContract.ListItems.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+
+        ArrayList<GroceryItem> groceryList = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            GroceryItem item = new GroceryItem(
+                    cursor.getString(cursor.getColumnIndex(GroceryListContract.ListItems.COLUMN_ENTRY)),
+                    cursor.getInt(cursor.getColumnIndex(GroceryListContract.ListItems.COLUMN_CHECKED)) != 0
+            );
+            groceryList.add(item);
+        }
+        cursor.close();
+        return groceryList;
     }
 
     /**
-     * Removes and item from the grocery list.
+     * Removes all checked items from the grocery list.
      *
-     * @return boolean
      */
-    public boolean removeGroceryItems(){
-        boolean removed = false;
-        if (0 == mGroceryList.size()) {
-            return removed;
-        }
+    public void removeGroceryItems(){
 
-        //TODO create new list to find items to remove, then remove them from the field list
-
-        ArrayList<GroceryItem> tempList = new ArrayList<>();
-        tempList.addAll(mGroceryList);
-
-
-        for (int i = 0; i < tempList.size(); i++) {
-            GroceryItem item = tempList.get(i);
-            if (item.isChecked() && mGroceryList.contains(item)) {
+        //We need to have a double list here so we don't modify a list as we are iterating over it
+        ArrayList<GroceryItem> itemsToRemove = new ArrayList<>();
+        for(GroceryItem item: mGroceryList) {
+            if(item.isChecked()) {
+                itemsToRemove.add(item);
+                String whereClause = GroceryListContract.ListItems.COLUMN_ENTRY + " = ?";
+                String[] sqlSelectionArgs = {item.getItemName() };
+                mDB.delete(GroceryListContract.ListItems.TABLE_NAME, whereClause, sqlSelectionArgs);
                 Log.d(this.getClass().getSimpleName(), "removing item [ " + item.getItemName() + " ]");
-                mGroceryList.remove(item);
-                removed = true;
+
             }
         }
+
+        for (GroceryItem item : itemsToRemove) {
+            if(mGroceryList.contains(item)) {
+                mGroceryList.remove(item);
+            }
+        }
+
         notifyDataSetChanged();
-        return removed;
     }
 
     public boolean itemSelected () {
@@ -90,14 +123,25 @@ public class GroceryItemAdapter extends RecyclerView.Adapter<GroceryItemAdapter.
         return isSelected;
     }
 
-    public void addGroceryItem(String item) {
-        mGroceryList.add(new GroceryItem(item));
+    public boolean addGroceryItem(GroceryItem item) {
+        //Don't add the same item twice
+        if(mGroceryList.contains(item)) {
+            return false;
+        }
+
+        mGroceryList.add(item);
+        ContentValues values = new ContentValues();
+        values.put(GroceryListContract.ListItems.COLUMN_ENTRY, item.getItemName());
+        values.put(GroceryListContract.ListItems.COLUMN_CHECKED, item.isChecked() ? 1 : 0);
+        mDB.insert(GroceryListContract.ListItems.TABLE_NAME, null, values);
         notifyItemInserted(0);
         notifyDataSetChanged();
+        return true;
     }
 
     public void clearGroceryList() {
         mGroceryList.clear();
+        mDB.delete(GroceryListContract.ListItems.TABLE_NAME, null, null);
         notifyDataSetChanged();
     }
 
@@ -134,7 +178,15 @@ public class GroceryItemAdapter extends RecyclerView.Adapter<GroceryItemAdapter.
                 GroceryItem item = (GroceryItem) cb.getTag();
                 item.setChecked(cb.isChecked());
                 mGroceryList.get(pos).setChecked(cb.isChecked());
-                mCheckedChangedListener.onItemCheckChange(item.getItemName(), cb.isChecked());
+
+                //Update the DB when an item is checked off or not.
+                String sqlSelection = GroceryListContract.ListItems.COLUMN_ENTRY +  " = ? ";
+                String[] sqlSelectionArgs = { item.getItemName() };
+                ContentValues values = new ContentValues();
+                values.put(GroceryListContract.ListItems.COLUMN_CHECKED, item.isChecked() ? 1 : 0);
+                mDB.update(GroceryListContract.ListItems.TABLE_NAME, values, sqlSelection, sqlSelectionArgs);
+
+                mCheckedChangedListener.onItemCheckChange(item, cb.isChecked());
             }
         });
 
