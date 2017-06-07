@@ -2,8 +2,6 @@ package com.group7.goodongroceries.Utils;
 
 import android.net.Uri;
 
-import com.group7.goodongroceries.Models.Nutrient;
-
 import java.io.Serializable;
 
 public class USDAUtils {

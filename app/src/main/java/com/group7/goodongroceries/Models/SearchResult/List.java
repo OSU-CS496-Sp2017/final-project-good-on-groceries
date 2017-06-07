@@ -1,5 +1,5 @@
 
-package com.group7.goodongroceries.Utils;
+package com.group7.goodongroceries.Models.SearchResult;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,5 +1,5 @@
 
-package com.group7.goodongroceries.Models;
+package com.group7.goodongroceries.Models.NutritionResult;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,55 +13,65 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "sr",
-    "type",
-    "desc",
-    "nutrients",
-    "footnotes"
+    "ndbno",
+    "name",
+    "weight",
+    "measure",
+    "nutrients"
 })
-public class Food_ {
+public class Food {
 
-    @JsonProperty("sr")
-    private String sr;
-    @JsonProperty("type")
-    private String type;
-    @JsonProperty("desc")
-    private Desc desc;
+    @JsonProperty("ndbno")
+    private String ndbno;
+    @JsonProperty("name")
+    private String name;
+    @JsonProperty("weight")
+    private Double weight;
+    @JsonProperty("measure")
+    private String measure;
     @JsonProperty("nutrients")
     private List<Nutrient> nutrients = null;
-    @JsonProperty("footnotes")
-    private List<Object> footnotes = null;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    @JsonProperty("sr")
-    public String getSr() {
-        return sr;
+    @JsonProperty("ndbno")
+    public String getNdbno() {
+        return ndbno;
     }
 
-    @JsonProperty("sr")
-    public void setSr(String sr) {
-        this.sr = sr;
+    @JsonProperty("ndbno")
+    public void setNdbno(String ndbno) {
+        this.ndbno = ndbno;
     }
 
-    @JsonProperty("type")
-    public String getType() {
-        return type;
+    @JsonProperty("name")
+    public String getName() {
+        return name;
     }
 
-    @JsonProperty("type")
-    public void setType(String type) {
-        this.type = type;
+    @JsonProperty("name")
+    public void setName(String name) {
+        this.name = name;
     }
 
-    @JsonProperty("desc")
-    public Desc getDesc() {
-        return desc;
+    @JsonProperty("weight")
+    public Double getWeight() {
+        return weight;
     }
 
-    @JsonProperty("desc")
-    public void setDesc(Desc desc) {
-        this.desc = desc;
+    @JsonProperty("weight")
+    public void setWeight(Double weight) {
+        this.weight = weight;
+    }
+
+    @JsonProperty("measure")
+    public String getMeasure() {
+        return measure;
+    }
+
+    @JsonProperty("measure")
+    public void setMeasure(String measure) {
+        this.measure = measure;
     }
 
     @JsonProperty("nutrients")
@@ -72,16 +82,6 @@ public class Food_ {
     @JsonProperty("nutrients")
     public void setNutrients(List<Nutrient> nutrients) {
         this.nutrients = nutrients;
-    }
-
-    @JsonProperty("footnotes")
-    public List<Object> getFootnotes() {
-        return footnotes;
-    }
-
-    @JsonProperty("footnotes")
-    public void setFootnotes(List<Object> footnotes) {
-        this.footnotes = footnotes;
     }
 
     @JsonAnyGetter

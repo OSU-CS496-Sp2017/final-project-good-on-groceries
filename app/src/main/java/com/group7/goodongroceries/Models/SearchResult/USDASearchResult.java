@@ -1,5 +1,5 @@
 
-package com.group7.goodongroceries.Models;
+package com.group7.goodongroceries.Models.SearchResult;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,23 +12,23 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "food"
+    "list"
 })
-public class Food {
+public class USDASearchResult {
 
-    @JsonProperty("food")
-    private Food_ food;
+    @JsonProperty("list")
+    private List list;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    @JsonProperty("food")
-    public Food_ getFood() {
-        return food;
+    @JsonProperty("list")
+    public List getList() {
+        return list;
     }
 
-    @JsonProperty("food")
-    public void setFood(Food_ food) {
-        this.food = food;
+    @JsonProperty("list")
+    public void setList(List list) {
+        this.list = list;
     }
 
     @JsonAnyGetter
