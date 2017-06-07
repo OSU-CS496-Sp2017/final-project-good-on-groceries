@@ -1,8 +1,7 @@
 
-package com.group7.goodongroceries.Models;
+package com.group7.goodongroceries.Models.NutritionResult;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -14,26 +13,23 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "nutrient_id",
-    "name",
-    "group",
+    "nutrient",
     "unit",
     "value",
-    "measures"
+    "gm"
 })
 public class Nutrient {
 
     @JsonProperty("nutrient_id")
     private String nutrientId;
-    @JsonProperty("name")
-    private String name;
-    @JsonProperty("group")
-    private String group;
+    @JsonProperty("nutrient")
+    private String nutrient;
     @JsonProperty("unit")
     private String unit;
     @JsonProperty("value")
     private String value;
-    @JsonProperty("measures")
-    private List<Measure> measures = null;
+    @JsonProperty("gm")
+    private Double gm;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -47,24 +43,14 @@ public class Nutrient {
         this.nutrientId = nutrientId;
     }
 
-    @JsonProperty("name")
-    public String getName() {
-        return name;
+    @JsonProperty("nutrient")
+    public String getNutrient() {
+        return nutrient;
     }
 
-    @JsonProperty("name")
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @JsonProperty("group")
-    public String getGroup() {
-        return group;
-    }
-
-    @JsonProperty("group")
-    public void setGroup(String group) {
-        this.group = group;
+    @JsonProperty("nutrient")
+    public void setNutrient(String nutrient) {
+        this.nutrient = nutrient;
     }
 
     @JsonProperty("unit")
@@ -87,14 +73,14 @@ public class Nutrient {
         this.value = value;
     }
 
-    @JsonProperty("measures")
-    public List<Measure> getMeasures() {
-        return measures;
+    @JsonProperty("gm")
+    public Double getGm() {
+        return gm;
     }
 
-    @JsonProperty("measures")
-    public void setMeasures(List<Measure> measures) {
-        this.measures = measures;
+    @JsonProperty("gm")
+    public void setGm(Double gm) {
+        this.gm = gm;
     }
 
     @JsonAnyGetter

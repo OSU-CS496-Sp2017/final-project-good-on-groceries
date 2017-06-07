@@ -1,5 +1,5 @@
 
-package com.group7.goodongroceries.Models;
+package com.group7.goodongroceries.Models.SearchResult;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,32 +12,45 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-    "ndbno",
+    "offset",
+    "group",
     "name",
-    "ds",
-    "ru"
+    "ndbno",
+    "ds"
 })
-public class Desc {
+public class Item {
 
-    @JsonProperty("ndbno")
-    private String ndbno;
+    @JsonProperty("offset")
+    private Integer offset;
+    @JsonProperty("group")
+    private String group;
     @JsonProperty("name")
     private String name;
+    @JsonProperty("ndbno")
+    private String ndbno;
     @JsonProperty("ds")
     private String ds;
-    @JsonProperty("ru")
-    private String ru;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    @JsonProperty("ndbno")
-    public String getNdbno() {
-        return ndbno;
+    @JsonProperty("offset")
+    public Integer getOffset() {
+        return offset;
     }
 
-    @JsonProperty("ndbno")
-    public void setNdbno(String ndbno) {
-        this.ndbno = ndbno;
+    @JsonProperty("offset")
+    public void setOffset(Integer offset) {
+        this.offset = offset;
+    }
+
+    @JsonProperty("group")
+    public String getGroup() {
+        return group;
+    }
+
+    @JsonProperty("group")
+    public void setGroup(String group) {
+        this.group = group;
     }
 
     @JsonProperty("name")
@@ -50,6 +63,16 @@ public class Desc {
         this.name = name;
     }
 
+    @JsonProperty("ndbno")
+    public String getNdbno() {
+        return ndbno;
+    }
+
+    @JsonProperty("ndbno")
+    public void setNdbno(String ndbno) {
+        this.ndbno = ndbno;
+    }
+
     @JsonProperty("ds")
     public String getDs() {
         return ds;
@@ -58,16 +81,6 @@ public class Desc {
     @JsonProperty("ds")
     public void setDs(String ds) {
         this.ds = ds;
-    }
-
-    @JsonProperty("ru")
-    public String getRu() {
-        return ru;
-    }
-
-    @JsonProperty("ru")
-    public void setRu(String ru) {
-        this.ru = ru;
     }
 
     @JsonAnyGetter
