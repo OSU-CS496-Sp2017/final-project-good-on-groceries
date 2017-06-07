@@ -1,13 +1,18 @@
 package com.group7.goodongroceries;
 
 
+import android.util.Log;
+
+import com.group7.goodongroceries.Utils.NetworkUtils;
 import com.group7.goodongroceries.Utils.USDAUtils;
 
-import org.apache.maven.model.Build;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
+
+
+import java.io.Console;
 
 import static org.junit.Assert.*;
 
@@ -35,5 +40,14 @@ public class NetworkUtilsTest {
         assertEquals(result, expected);
     }
 
+    @Test
+    public void callUSDAAPITest() throws Exception {
+        String searchTerm = "butter";
+        String searchUrl = USDAUtils.buildSearchQueryURL(searchTerm);
+        String result = NetworkUtils.doHTTPGet(searchUrl);
+        Log.d("call usda api test", result);
+        assertNotNull(result);
+    }
 
 }
+

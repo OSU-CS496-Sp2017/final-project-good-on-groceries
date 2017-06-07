@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -18,7 +19,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.group7.goodongroceries.Utils.NetworkUtils;
 import com.group7.goodongroceries.Utils.USDAUtils;
+
+import java.io.IOException;
 
 
 public class MainActivity extends AppCompatActivity implements GroceryItemAdapter.OnGroceryCheckedChangeListener {
@@ -77,6 +81,13 @@ public class MainActivity extends AppCompatActivity implements GroceryItemAdapte
                 String todoText = mGroceryEntryEditText.getText().toString();
                 if (!TextUtils.isEmpty(todoText)) {
                     String result = USDAUtils.buildSearchQueryURL(todoText);
+                    Log.d("MainActivity", result);
+                    try {
+                        String val = NetworkUtils.doHTTPGet(result);
+                        Log.d("MainActivity", val);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     mGroceryListRecyclerView.scrollToPosition(0);
                     mGroceryItemAdapter.addGroceryItem(result);
                     mGroceryEntryEditText.setText("");
