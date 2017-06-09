@@ -123,6 +123,10 @@ public class GroceryItemAdapter extends RecyclerView.Adapter<GroceryItemAdapter.
         return isSelected;
     }
 
+    public List<GroceryItem> getGroceryList() {
+        return mGroceryList;
+    }
+
     public boolean addGroceryItem(GroceryItem item) {
         //Don't add the same item twice
         if(mGroceryList.contains(item)) {

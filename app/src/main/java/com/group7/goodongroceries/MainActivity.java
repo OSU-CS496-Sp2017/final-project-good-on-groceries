@@ -72,9 +72,34 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 String itemText = mItemEntryBoxET.getText().toString();
-                if (!TextUtils.isEmpty(itemText)) {
 
+                // Show Toast if there is no text.
+                if (TextUtils.isEmpty(itemText)) {
+                    if(null != mGroceryToast) {
+                        mGroceryToast.cancel();
+                    }
+                    mGroceryToast = Toast.makeText(MainActivity.this, "You must enter an item name!", Toast.LENGTH_LONG);
+                    mGroceryToast.show();
+                    return;
+                } else if (mGroceryItemAdapter.getGroceryList().contains(new GroceryItem(itemText))) {
+                    if(null != mGroceryToast) {
+                        mGroceryToast.cancel();
+                    }
+                    mGroceryToast = Toast.makeText(MainActivity.this, itemText + " is already in the list!", Toast.LENGTH_LONG);
+                    mGroceryToast.show();
+                    mItemEntryBoxET.setText("");
+                    return;
                 }
+
+                // Show Toast if no letters or numbers are entered
+//                if (!itemText.matches("[a-zA-Z0-9 ]")) {
+//                    if(null != mGroceryToast) {
+//                        mGroceryToast.cancel();
+//                    }
+//                    mGroceryToast = Toast.makeText(MainActivity.this, "The item name is not valid!\n Letters and numbers only.", Toast.LENGTH_LONG);
+//                    mGroceryToast.show();
+//                    return;
+//                }
                 updateList(mItemEntryBoxET.getText().toString());
                 mItemEntryBoxET.setText("");
             }
@@ -162,13 +187,13 @@ public class MainActivity extends AppCompatActivity
                 builder.setTitle("Delete Selected Items")
                 .setMessage("Are you sure?")
                 .setIcon(R.drawable.ic_action_delete_single)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                .setPositiveButton("No", null)
+                .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mGroceryItemAdapter.removeGroceryItems();
                     }
                 })
-                .setNegativeButton("No", null)
                 .show();
 
                 return true;
@@ -184,13 +209,13 @@ public class MainActivity extends AppCompatActivity
                 builder.setTitle("Delete All Items")
                 .setMessage("Are you sure?")
                 .setIcon(R.drawable.ic_action_clear)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Log.d(this.getClass().getSimpleName(), "Clearing all items");
-                    mGroceryItemAdapter.clearGroceryList();                    }
+                .setPositiveButton("No", null)
+                .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.d(this.getClass().getSimpleName(), "Clearing all items");
+                        mGroceryItemAdapter.clearGroceryList();                    }
                 })
-                .setNegativeButton("No", null)
                 .show();
                 return true;
             default:

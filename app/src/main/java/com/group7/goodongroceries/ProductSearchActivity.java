@@ -38,6 +38,9 @@ public class ProductSearchActivity extends AppCompatActivity {
 
     private Toast mToast;
 
+    //TODO testing changing the menu icon
+    private Menu mActionBarMenu;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +84,11 @@ public class ProductSearchActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.product_detail, menu);
+        //TODO check to see if the product is linked here, set the link icon in the menu accordingly:
+        // menu.findItem(R.id.action_link).setIcon(R.drawable.ic_ulinked);
+        // menu.findItem(R.id.action_link).setIcon(R.drawable.ic_linked);
+        mActionBarMenu = menu;
+
         return true;
     }
 
@@ -94,11 +102,17 @@ public class ProductSearchActivity extends AppCompatActivity {
                 }
                 //TODO might want to use db to determine links, e.g. have foreign keys for products and items in the db
                 if (mProductItem.isLinked()) {
-                    mToast = Toast.makeText(this, mProductItem.getProductName() + " is already linked to item " + mProductItem.getItemName(), Toast.LENGTH_LONG);
+                    //TODO remove link from product to item from the db
+                    mProductItem.setLinked(false);
+                    //disable the "Change Info" button so that it can't be clicked after unlinking
+//                    mChangeProductCardView.setVisibility(View.INVISIBLE);
+                    mChangeProductCardView.setVisibility(View.GONE);
+                    mChangeProductCardView.setOnClickListener(null);
+                    mToast = Toast.makeText(this, mProductItem.getProductName() + " is no longer linked to item " + mProductItem.getItemName(), Toast.LENGTH_LONG);
+                    mActionBarMenu.findItem(R.id.action_link).setIcon(R.drawable.ic_unlinked);
                 } else {
                     mProductItem.setLinked(true);
                     mToast = Toast.makeText(this, mProductItem.getProductName() + " is now linked to item " + mProductItem.getItemName(), Toast.LENGTH_LONG);
-
                     mChangeProductCardView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -108,6 +122,10 @@ public class ProductSearchActivity extends AppCompatActivity {
                             startActivity(intent);
                         }
                     });
+                    mChangeProductCardView.setVisibility(View.VISIBLE);
+                    if (null != mActionBarMenu) {
+                        mActionBarMenu.findItem(R.id.action_link).setIcon(R.drawable.ic_linked);
+                    }
                     mChangeProductInfo.setVisibility(View.VISIBLE);
                     mChangeProductImageView.setVisibility(View.VISIBLE);
                 }
