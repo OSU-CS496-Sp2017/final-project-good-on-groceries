@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 builder.setTitle("Delete Selected Items")
                 .setMessage("Are you sure?")
-                .setIcon(R.drawable.ic_action_delete_selected_red)
+                .setIcon(R.drawable.ic_action_delete_selected_white)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 builder.setTitle("Delete All Items")
                 .setMessage("Are you sure?")
-                .setIcon(R.drawable.ic_action_delete_all_red)
+                .setIcon(R.drawable.ic_action_delete_all_white)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
