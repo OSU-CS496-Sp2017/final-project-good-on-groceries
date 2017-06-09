@@ -81,6 +81,14 @@ public class MainActivity extends AppCompatActivity
                     mGroceryToast = Toast.makeText(MainActivity.this, "You must enter an item name!", Toast.LENGTH_LONG);
                     mGroceryToast.show();
                     return;
+                } else if (mGroceryItemAdapter.getGroceryList().contains(new GroceryItem(itemText))) {
+                    if(null != mGroceryToast) {
+                        mGroceryToast.cancel();
+                    }
+                    mGroceryToast = Toast.makeText(MainActivity.this, itemText + " is already in the list!", Toast.LENGTH_LONG);
+                    mGroceryToast.show();
+                    mItemEntryBoxET.setText("");
+                    return;
                 }
 
                 // Show Toast if no letters or numbers are entered
@@ -178,7 +186,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 builder.setTitle("Delete Selected Items")
                 .setMessage("Are you sure?")
-                .setIcon(R.drawable.ic_action_delete_selected_white)
+                .setIcon(R.drawable.ic_action_delete_single)
                 .setPositiveButton("No", null)
                 .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
@@ -200,7 +208,7 @@ public class MainActivity extends AppCompatActivity
                 }
                 builder.setTitle("Delete All Items")
                 .setMessage("Are you sure?")
-                .setIcon(R.drawable.ic_action_delete_all_white)
+                .setIcon(R.drawable.ic_action_clear)
                 .setPositiveButton("No", null)
                 .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
                     @Override

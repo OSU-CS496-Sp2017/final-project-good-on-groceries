@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/action_link"
-        android:icon="@drawable/ic_action_link"
+        android:icon="@drawable/ic_unlinked"
         android:title="@string/action_link"
         app:showAsAction="ifRoom" />
 
