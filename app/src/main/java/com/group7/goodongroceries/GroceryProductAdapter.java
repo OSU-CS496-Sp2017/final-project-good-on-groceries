@@ -12,14 +12,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.group7.goodongroceries.Models.SearchResult.SearchResultItem;
+
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by dan on 4/18/2017.
  */
 
 public class GroceryProductAdapter extends RecyclerView.Adapter<GroceryProductAdapter.GroceryProductViewHolder> {
-    private ArrayList<ProductItem> mGroceryProductList;
+    private List<SearchResultItem> mGroceryProductList;
     private OnItemClickListener mProductClickListener;
 
     /**
@@ -33,7 +36,7 @@ public class GroceryProductAdapter extends RecyclerView.Adapter<GroceryProductAd
      * @param clickListener
      */
     public GroceryProductAdapter(OnItemClickListener clickListener) {
-        mGroceryProductList = new ArrayList<ProductItem>();
+        mGroceryProductList = new ArrayList<SearchResultItem>();
         mProductClickListener = clickListener;
     }
 
@@ -57,7 +60,7 @@ public class GroceryProductAdapter extends RecyclerView.Adapter<GroceryProductAd
      */
     @Override
     public void onBindViewHolder(GroceryProductViewHolder holder, int position) {
-        final ProductItem groceryProduct = mGroceryProductList.get(adapterPositionToArrayIndex(position));
+        final SearchResultItem groceryProduct = mGroceryProductList.get(adapterPositionToArrayIndex(position));
         holder.mProductImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,7 +75,7 @@ public class GroceryProductAdapter extends RecyclerView.Adapter<GroceryProductAd
         return mGroceryProductList.size();
     }
 
-    public void updateSearchResults(ArrayList<ProductItem> searchResultList) {
+    public void updateSearchResults(List<SearchResultItem> searchResultList) {
         mGroceryProductList = searchResultList;
         notifyDataSetChanged();
     }
@@ -82,7 +85,7 @@ public class GroceryProductAdapter extends RecyclerView.Adapter<GroceryProductAd
     }
 
     public interface OnItemClickListener {
-        void onItemClick(ProductItem item);
+        void onItemClick(SearchResultItem item);
     }
 
     class GroceryProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -98,13 +101,13 @@ public class GroceryProductAdapter extends RecyclerView.Adapter<GroceryProductAd
             mProductImage.setOnClickListener(this);
         }
 
-        public void bind(ProductItem item) {
-            mProductTextView.setText(item.getProductName() + " " + item.getItemName());
+        public void bind(SearchResultItem item) {
+            mProductTextView.setText(item.getName());
         }
 
         @Override
         public void onClick(View v) {
-            ProductItem item = mGroceryProductList.get(adapterPositionToArrayIndex(getAdapterPosition()));
+            SearchResultItem item = mGroceryProductList.get(adapterPositionToArrayIndex(getAdapterPosition()));
             mProductClickListener.onItemClick(item);
         }
 

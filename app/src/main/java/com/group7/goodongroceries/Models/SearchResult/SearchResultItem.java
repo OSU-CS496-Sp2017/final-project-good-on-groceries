@@ -1,6 +1,7 @@
 
 package com.group7.goodongroceries.Models.SearchResult;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -18,7 +19,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "ndbno",
     "ds"
 })
-public class Item {
+public class SearchResultItem implements Serializable {
+    public static final String PRODUCT_EXTRA_ITEM = "productExtraItem";
 
     @JsonProperty("offset")
     private Integer offset;

@@ -9,11 +9,20 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.group7.goodongroceries.Models.SearchResult.SearchResultItem;
+import com.group7.goodongroceries.Models.SearchResult.USDASearchResult;
+import com.group7.goodongroceries.Models.USDAObjectMapper;
+import com.group7.goodongroceries.Utils.NetworkUtils;
+import com.group7.goodongroceries.Utils.USDAUtils;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by dan on 5/31/2017.
@@ -24,12 +33,12 @@ import java.util.ArrayList;
  * - "Milk" is an item in the grocery list.
  * - User clicks on "Milk", the new ItemSearchActivity queries the USDA database and returns
  * a list of milk products that the user can click on for more details (nutrition, ingredients, etc.)
- * which is displayed in {@link ProductSearchActivity}
+ * which is displayed in {@link ProductDetailActivity}
  */
 
 public class ItemSearchActivity extends AppCompatActivity
         implements GroceryProductAdapter.OnItemClickListener,
-        LoaderManager.LoaderCallbacks<ProductItem> {
+        LoaderManager.LoaderCallbacks<String> {
 
     private static final int ITEM_SEARCH_LOADER_ID = 1;
     private static final String ITEM_SEARCH_KEY = "grocery_item_search";
@@ -41,7 +50,6 @@ public class ItemSearchActivity extends AppCompatActivity
     private TextView mLoadingErrorMessageTV;
 
     private GroceryItem mItem;
-    private ProductItem mProduct;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,33 +71,30 @@ public class ItemSearchActivity extends AppCompatActivity
             mItemNameTV.setText(mItem.getItemName());
         }
 
-        ProductItem product = new ProductItem(null, mItem.getItemName(), false);
+        // Removing for now ProductItem product = new ProductItem(null, mItem.getItemName(), false);
         Bundle argsBundle = new Bundle();
-        argsBundle.putSerializable(ITEM_SEARCH_KEY, product);
+        argsBundle.putSerializable(ITEM_SEARCH_KEY, mItem);
         getSupportLoaderManager().initLoader(ITEM_SEARCH_LOADER_ID, argsBundle, this);
 
     }
 
     @Override
-    public void onItemClick(ProductItem item) {
-        Intent intent = new Intent(this, ProductSearchActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(ProductItem.PRODUCT_EXTRA_ITEM, item);
-        intent.putExtra(ProductItem.PRODUCT_EXTRA_ITEM, bundle);
-//        intent.putExtra(GroceryItem.EXTRA_GROCERY_ITEM, item);
+    public void onItemClick(SearchResultItem item) {
+        Intent intent = new Intent(this, ProductDetailActivity.class);
+        intent.putExtra(SearchResultItem.PRODUCT_EXTRA_ITEM, item);
+        intent.putExtra(GroceryItem.EXTRA_GROCERY_ITEM, mItem);
         startActivity(intent);
     }
 
     @Override
-    public Loader<ProductItem> onCreateLoader(int id, final Bundle args) {
-        return new AsyncTaskLoader<ProductItem>(this) {
+    public Loader<String> onCreateLoader(int id, final Bundle args) {
+        return new AsyncTaskLoader<String>(this) {
 
-            ProductItem mSearchResults;
+            String mSearchResults;
 
             @Override
             protected void onStartLoading() {
                 if (null != args) {
-                    mSearchResults = (ProductItem) args.getSerializable(ITEM_SEARCH_KEY);
                     if (null != mSearchResults) {
                         deliverResult(mSearchResults);
                     } else {
@@ -100,36 +105,52 @@ public class ItemSearchActivity extends AppCompatActivity
             }
 
             @Override
-            public ProductItem loadInBackground() {
-                if (null != args) {
+            public String loadInBackground() {
+                if (null != args && args.containsKey(ITEM_SEARCH_KEY)) {
+                    GroceryItem item = (GroceryItem)args.getSerializable(ITEM_SEARCH_KEY);
                     //TODO put search query here.
                     //TODO should return JSON result
-                    return (ProductItem)args.getSerializable(ITEM_SEARCH_KEY);
+                    String searchUrl = USDAUtils.buildSearchQueryURL(item.getItemName());
+                    try {
+                        mSearchResults = NetworkUtils.doHTTPGet(searchUrl);
+                        return mSearchResults;
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 return null;
             }
         };
     }
 
-    private ArrayList<ProductItem> createTempListData(ProductItem item) {
-        ArrayList<ProductItem> list = new ArrayList<>();
+    /*
+    private ArrayList<USDASearchResult> createTempListData(USDASearchResult item) {
+        ArrayList<USDASearchResult> list = new ArrayList<>();
         for (int i = 1; i < 21; i++) {
-            list.add(new ProductItem(" product " + i, item.getItemName(), false));
+            list.add(new USDASearchResult(" product " + i, item.getItemName(), false));
         }
         return list;
     }
+    */
 
 
     @Override
-    public void onLoadFinished(Loader<ProductItem> loader, ProductItem data) {
+    public void onLoadFinished(Loader<String> loader, String data) {
 
         mLoadingIndicatorPB.setVisibility(View.INVISIBLE);
         if (null != data) {
             mLoadingErrorMessageTV.setVisibility(View.INVISIBLE);
             mSearchResultsRV.setVisibility(View.VISIBLE);
             //TODO parse data into list here. The list needs to have ProductItems: ArrayList<ProductItem>
-
-            mGroceryProductAdapter.updateSearchResults(createTempListData(data));
+            try {
+                USDASearchResult result =  USDAObjectMapper.SearchResultConverter(data);
+                result.getList().getItem();
+                mGroceryProductAdapter.updateSearchResults(result.getList().getItem());
+            } catch (IOException e) {
+                mSearchResultsRV.setVisibility(View.INVISIBLE);
+                mLoadingErrorMessageTV.setVisibility(View.VISIBLE);
+                e.printStackTrace();
+            }
         } else {
             mSearchResultsRV.setVisibility(View.INVISIBLE);
             mLoadingErrorMessageTV.setVisibility(View.VISIBLE);
@@ -138,7 +159,7 @@ public class ItemSearchActivity extends AppCompatActivity
     }
 
     @Override
-    public void onLoaderReset(Loader<ProductItem> loader) {
+    public void onLoaderReset(Loader<String> loader) {
 
     }
 }

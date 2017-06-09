@@ -50,6 +50,11 @@ public class GroceryItemAdapter extends RecyclerView.Adapter<GroceryItemAdapter.
         mCheckedChangedListener = checkedChangeListener;
     }
 
+    public void refresh() {
+        mGroceryList = getGroceryListFromDb();
+        this.notifyDataSetChanged();
+    }
+
     public interface OnGroceryItemClickListener {
         void onItemClick(GroceryItem groceryItem);
     }
@@ -73,7 +78,8 @@ public class GroceryItemAdapter extends RecyclerView.Adapter<GroceryItemAdapter.
         while (cursor.moveToNext()) {
             GroceryItem item = new GroceryItem(
                     cursor.getString(cursor.getColumnIndex(GroceryListContract.ListItems.COLUMN_ENTRY)),
-                    cursor.getInt(cursor.getColumnIndex(GroceryListContract.ListItems.COLUMN_CHECKED)) != 0
+                    cursor.getInt(cursor.getColumnIndex(GroceryListContract.ListItems.COLUMN_CHECKED)) != 0,
+                    cursor.getString(cursor.getColumnIndex(GroceryListContract.ListItems.COLUMN_FOOD_ID))
             );
             groceryList.add(item);
         }

@@ -41,7 +41,7 @@ public class List {
     @JsonProperty("sort")
     private String sort;
     @JsonProperty("item")
-    private java.util.List<Item> item = null;
+    private java.util.List<SearchResultItem> item = null;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -126,13 +126,13 @@ public class List {
     }
 
     @JsonProperty("item")
-    public java.util.List<Item> getItem() {
+    public java.util.List<SearchResultItem> getItem() {
         return item;
     }
 
-    @JsonProperty("item")
-    public void setItem(java.util.List<Item> item) {
-        this.item = item;
+    @JsonProperty("searchResultItem")
+    public void setItem(java.util.List<SearchResultItem> searchResultItem) {
+        this.item = searchResultItem;
     }
 
     @JsonAnyGetter
