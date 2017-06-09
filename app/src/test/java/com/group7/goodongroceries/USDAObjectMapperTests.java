@@ -2,7 +2,6 @@ package com.group7.goodongroceries;
 
 
 import com.group7.goodongroceries.Models.NutritionResult.USDANutritionResult;
-import com.group7.goodongroceries.Models.SearchResult.Item;
 import com.group7.goodongroceries.Models.SearchResult.List;
 import com.group7.goodongroceries.Models.SearchResult.USDASearchResult;
 import com.group7.goodongroceries.Models.USDAObjectMapper;

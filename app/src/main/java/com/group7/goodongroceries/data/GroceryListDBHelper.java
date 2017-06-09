@@ -21,7 +21,7 @@ public class GroceryListDBHelper extends SQLiteOpenHelper {
                         GroceryListContract.ListItems._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         GroceryListContract.ListItems.COLUMN_ENTRY + " TEXT NOT NULL, " +
                         GroceryListContract.ListItems.COLUMN_CHECKED + " INTEGER DEFAULT 1, " +
-                        GroceryListContract.ListItems.COLUMN_FOOD_ID + " INTEGER " +
+                        GroceryListContract.ListItems.COLUMN_FOOD_ID + " TEXT " +
                         ");";
 
         final String SQL_CREATE_FOOD_TABLE =
@@ -32,7 +32,7 @@ public class GroceryListDBHelper extends SQLiteOpenHelper {
 
         final String SQL_CREATE_NUTRIENT_TABLE =
                 "CREATE TABLE " + GroceryListContract.Nutrients.TABLE_NAME + " (" +
-                        GroceryListContract.Nutrients._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        GroceryListContract.Nutrients._ID + " INTEGER PRIMARY KEY, " +
                         GroceryListContract.Nutrients.COLUMN_GROUP + " TEXT NOT NULL, " +
                         GroceryListContract.Nutrients.COLUMN_UNIT + " TEXT NOT NULL, " +
                         GroceryListContract.Nutrients.COLUMN_VALUE + " TEXT NOT NULL, " +

@@ -61,8 +61,4 @@ public class USDAUtils {
                 .build()
                 .toString();
     }
-
-    public static Exception parseForecastJSON(String forecastJSON) {
-        return new UnsupportedOperationException();
-    }
 }

@@ -32,7 +32,7 @@
                 android:value=".MainActivity" />
         </activity>
         <activity
-            android:name="com.group7.goodongroceries.ProductSearchActivity"
+            android:name="com.group7.goodongroceries.ProductDetailActivity"
             android:parentActivityName=".ItemSearchActivity"
             android:launchMode="singleTop">
 

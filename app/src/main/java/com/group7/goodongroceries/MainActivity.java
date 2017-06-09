@@ -2,7 +2,6 @@ package com.group7.goodongroceries;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -22,12 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.group7.goodongroceries.data.GroceryListContract;
 import com.group7.goodongroceries.data.GroceryListDBHelper;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements GroceryItemAdapter.OnItemCheckedChangeListener,
@@ -134,13 +128,10 @@ public class MainActivity extends AppCompatActivity
         // TODO Change boolean value to see affect on main screen info button
         // true: info button goes direction to product info screen, with option to change info
         // false: info button goes to product list screen, product info screens do not have the change info button.
-        ProductItem item = new ProductItem("whoohoo", groceryItem.getItemName(), false);
 
-        if (item.isLinked()) {
-            Intent intent = new Intent(this, ProductSearchActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(ProductItem.PRODUCT_EXTRA_ITEM, item);
-            intent.putExtra(ProductItem.PRODUCT_EXTRA_ITEM, bundle);
+        if (groceryItem.isLinked()) {
+            Intent intent = new Intent(this, ProductDetailActivity.class);
+            intent.putExtra(GroceryItem.EXTRA_GROCERY_ITEM, groceryItem);
             startActivity(intent);
         }else {
             Intent intent = new Intent(this, ItemSearchActivity.class);
@@ -164,6 +155,18 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mDB.close();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mGroceryItemAdapter.refresh();
     }
 
     @Override

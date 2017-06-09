@@ -33,6 +33,11 @@ public class Nutrient {
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
+    @Override
+    public String toString() {
+        return String.format("%s-%s%s", nutrient, value, unit);
+    }
+
     @JsonProperty("nutrient_id")
     public String getNutrientId() {
         return nutrientId;

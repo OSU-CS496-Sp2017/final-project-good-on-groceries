@@ -12,6 +12,7 @@ public class GroceryItem implements Serializable {
 
     private String mItemName;
     private boolean mIsChecked;
+    private String mLinkedProductId;
 
     public String getItemName() {
         return mItemName;
@@ -27,12 +28,30 @@ public class GroceryItem implements Serializable {
         mIsChecked = isChecked;
     }
 
+    public GroceryItem(String itemName, boolean isChecked, String ndbNo) {
+        mItemName = itemName;
+        mIsChecked = isChecked;
+        mLinkedProductId = ndbNo;
+    }
+
     public boolean isChecked() {
         return mIsChecked;
     }
 
     public void setChecked(boolean isChecked) {
         mIsChecked = isChecked;
+    }
+
+    public void setLinkedProductId(String productId) {
+        mLinkedProductId = productId;
+    }
+
+    public String getLinkedProductId() {
+        return mLinkedProductId;
+    }
+
+    public boolean isLinked() {
+        return mLinkedProductId != null;
     }
 
     @Override
