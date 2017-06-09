@@ -222,6 +222,7 @@ public class GroceryItemAdapter extends RecyclerView.Adapter<GroceryItemAdapter.
         }
 
         public void removeFromList() {
+            //TODO remove from db
             int position = getAdapterPosition();
             mGroceryList.remove(adapterPositionToArrayIndex(position));
             notifyDataSetChanged();

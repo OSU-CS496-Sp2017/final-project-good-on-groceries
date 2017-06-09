@@ -38,9 +38,6 @@ public class MainActivity extends AppCompatActivity
     private static final String ITEM_KEY = "groceryListItemName";
     private static final int MAIN_LOADER_ID = 0;
 
-    //TODO temporary value for testing, replace referenced sites with Toast about empty item
-    private static final String DEFAULT_ITEM_NAME= "garbonzo beans";
-
     private RecyclerView mGroceryItemsRV;
     private GroceryItemAdapter mGroceryItemAdapter;
     private EditText mItemEntryBoxET;
@@ -285,7 +282,7 @@ public class MainActivity extends AppCompatActivity
 
     public void updateList(String itemName) {
         if (null == itemName || itemName.isEmpty()) {
-            itemName = DEFAULT_ITEM_NAME;
+            return;
         }
 
         Log.d(TAG, "got item: " + itemName);
